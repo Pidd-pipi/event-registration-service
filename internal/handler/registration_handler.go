@@ -142,7 +142,7 @@ func (h *RegistrationHandler) wrapError(c *gin.Context, err error, ctx string) {
 	if errors.As(err, &appErr) {
 		c.Set("audit_detail", appErr.Message)
 		h.logger.Warn("registration handler error", "context", ctx, "error", appErr.Error())
-		Fail(c, http.StatusOK, appErr.Code, appErr.Message)
+		Fail(c, appErrorStatus(appErr.Code), appErr.Code, appErr.Message)
 		return
 	}
 	h.logger.Error("registration handler error", "context", ctx, "error", err.Error())

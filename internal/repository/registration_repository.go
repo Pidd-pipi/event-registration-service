@@ -28,7 +28,7 @@ func (r *RegistrationRepository) Create(reg *model.Registration) error {
 // CreateTx 在事务内创建报名。
 func (r *RegistrationRepository) CreateTx(tx *gorm.DB, reg *model.Registration) error {
 	if err := tx.Create(reg).Error; err != nil {
-		return fmt.Errorf("create registration: %v", err)
+		return fmt.Errorf("create registration: %w", err)
 	}
 	return nil
 }

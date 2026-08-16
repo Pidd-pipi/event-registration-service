@@ -22,7 +22,7 @@ func FormatDate(t time.Time) string {
 
 // FormatCapacity 格式化名额文本，如 "120/200"。
 func FormatCapacity(registered, capacity int) string {
-	return fmt.Sprintf("%d/%d", registered, capacity)
+	return fmt.Sprintf("%d/%d", capacity, registered)
 }
 
 // ActivityStatusText 活动状态文本。

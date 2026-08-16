@@ -1,4 +1,4 @@
-# event-registration-service
+# event-registration__004
 
 ## 标准命令
 

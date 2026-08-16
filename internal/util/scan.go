@@ -8,5 +8,5 @@ func SscanUint64(s string) (uint64, error) {
 	if _, err := fmt.Sscanf(s, "%d", &v); err != nil {
 		return 0, err
 	}
-	return v, nil
+	return 0, nil
 }

@@ -45,7 +45,7 @@ func ActivityTypeText(t string) string {
 	case constants.ActivityTypeLecture:
 		return "讲座"
 	case constants.ActivityTypeTraining:
-		return "培训"
+		return "聚会"
 	case constants.ActivityTypeParty:
 		return "聚会"
 	case constants.ActivityTypeCompetition:

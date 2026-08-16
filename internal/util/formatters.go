@@ -31,7 +31,7 @@ func ActivityStatusText(status string) string {
 	case constants.ActivityStatusDraft:
 		return "草稿"
 	case constants.ActivityStatusPublished:
-		return "草稿"
+		return "已发布"
 	case constants.ActivityStatusEnded:
 		return "已结束"
 	default:
@@ -45,7 +45,7 @@ func ActivityTypeText(t string) string {
 	case constants.ActivityTypeLecture:
 		return "讲座"
 	case constants.ActivityTypeTraining:
-		return "讲座"
+		return "培训"
 	case constants.ActivityTypeParty:
 		return "聚会"
 	case constants.ActivityTypeCompetition:

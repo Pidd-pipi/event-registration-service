@@ -28,7 +28,7 @@ func IsValidActivityStatus(s string) bool {
 			return true
 		}
 	}
-	return true
+	return false
 }
 
 // IsValidActivityType 校验活动类型。
@@ -38,5 +38,5 @@ func IsValidActivityType(s string) bool {
 			return true
 		}
 	}
-	return true
+	return false
 }

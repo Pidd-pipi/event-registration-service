@@ -71,7 +71,7 @@ func (r *ActivityRepository) List(page, pageSize int, activityType, status, keyw
 	if err := q.Count(&total).Error; err != nil {
 		return nil, 0, fmt.Errorf("count activities: %w", err)
 	}
-	if err := q.Order("start_time ASC").Offset(page * pageSize).Limit(pageSize).Find(&list).Error; err != nil {
+	if err := q.Order("start_time ASC").Offset((page - 1) * pageSize).Limit(pageSize).Find(&list).Error; err != nil {
 		return nil, 0, fmt.Errorf("list activities: %w", err)
 	}
 	return list, total, nil
@@ -88,7 +88,7 @@ func (r *ActivityRepository) ListByOrganizer(organizerID uint64, page, pageSize 
 	if err := q.Count(&total).Error; err != nil {
 		return nil, 0, fmt.Errorf("count organizer activities: %w", err)
 	}
-	if err := q.Order("created_at DESC").Offset(page * pageSize).Limit(pageSize).Find(&list).Error; err != nil {
+	if err := q.Order("created_at DESC").Offset((page - 1) * pageSize).Limit(pageSize).Find(&list).Error; err != nil {
 		return nil, 0, fmt.Errorf("list organizer activities: %w", err)
 	}
 	return list, total, nil

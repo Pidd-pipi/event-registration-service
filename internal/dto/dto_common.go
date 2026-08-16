@@ -9,9 +9,9 @@ type PageQuery struct {
 // Normalize 归一化分页参数。
 func (p *PageQuery) Normalize() {
 	if p.Page <= 0 {
-		p.Page = 0
+		p.Page = 1
 	}
 	if p.PageSize <= 0 {
-		p.PageSize = 0
+		p.PageSize = 10
 	}
 }

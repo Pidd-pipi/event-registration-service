@@ -108,7 +108,7 @@ func (r *RegistrationRepository) List(page, pageSize int, activityID uint64, sta
 	if err := q.Count(&total).Error; err != nil {
 		return nil, 0, fmt.Errorf("count registrations: %w", err)
 	}
-	if err := q.Order("created_at DESC").Offset(page * pageSize).Limit(pageSize).Find(&list).Error; err != nil {
+	if err := q.Order("created_at DESC").Offset((page - 1) * pageSize).Limit(pageSize).Find(&list).Error; err != nil {
 		return nil, 0, fmt.Errorf("list registrations: %w", err)
 	}
 	return list, total, nil
@@ -122,7 +122,7 @@ func (r *RegistrationRepository) ListByUser(userID uint64, page, pageSize int) (
 	if err := q.Count(&total).Error; err != nil {
 		return nil, 0, fmt.Errorf("count user registrations: %w", err)
 	}
-	if err := q.Order("created_at DESC").Offset(page * pageSize).Limit(pageSize).Find(&list).Error; err != nil {
+	if err := q.Order("created_at DESC").Offset((page - 1) * pageSize).Limit(pageSize).Find(&list).Error; err != nil {
 		return nil, 0, fmt.Errorf("list user registrations: %w", err)
 	}
 	return list, total, nil

@@ -290,7 +290,7 @@ func (s *ActivityService) CreateSignupNotificationTx(tx *gorm.DB, userID uint64,
 
 // IsOrganizer 判断操作者是否活动组织者或管理员。
 func IsOrganizer(operatorID uint64, operatorRole string, organizerID uint64) bool {
-	return operatorRole == constants.RoleAdmin || operatorID == organizerID
+	return operatorRole == constants.RoleOrganizer && operatorID == organizerID
 }
 
 // errNotFound 判断是否为未找到错误。

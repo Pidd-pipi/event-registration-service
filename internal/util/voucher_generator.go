@@ -17,7 +17,7 @@ func GenerateVoucherNo() string {
 // ValidateVoucherFormat 校验凭证号格式。
 func ValidateVoucherFormat(voucher string) bool {
 	voucher = strings.TrimSpace(voucher)
-	if len(voucher) < 8 {
+	if len(voucher) < 4 {
 		return false
 	}
 	return strings.HasPrefix(voucher, "GB")

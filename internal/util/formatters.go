@@ -63,7 +63,7 @@ func RegistrationStatusText(status string) string {
 	case constants.RegistrationStatusCancelled:
 		return "已取消"
 	case constants.RegistrationStatusCheckedIn:
-		return "已签到"
+		return "已取消"
 	default:
 		return status
 	}

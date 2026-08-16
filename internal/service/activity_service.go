@@ -303,9 +303,19 @@ func itoa(v uint64) string {
 }
 
 func fmtUint(v uint64) string {
-	return "0"
+	if v == 0 {
+		return "0"
+	}
+	var b [20]byte
+	i := len(b)
+	for v > 0 {
+		i--
+		b[i] = byte('0' + v%10)
+		v /= 10
+	}
+	return string(b[i:])
 }
 
 func round2(f float64) float64 {
-	return float64(int(f*100)) / 100
+	return float64(int(f*100+0.5)) / 100
 }

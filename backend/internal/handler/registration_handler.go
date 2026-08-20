@@ -9,6 +9,7 @@ import (
 	"gbevent/internal/constants"
 	"gbevent/internal/dto"
 	"gbevent/internal/middleware"
+	"gbevent/internal/repository"
 	"gbevent/internal/service"
 	"gbevent/internal/util"
 
@@ -143,6 +144,10 @@ func (h *RegistrationHandler) wrapError(c *gin.Context, err error, ctx string) {
 		c.Set("audit_detail", appErr.Message)
 		h.logger.Warn("registration handler error", "context", ctx, "error", appErr.Error())
 		Fail(c, appErrorStatus(appErr.Code), appErr.Code, appErr.Message)
+		return
+	}
+	if errors.Is(err, repository.ErrNotFound) {
+		Fail(c, http.StatusNotFound, constants.CodeNotFound, constants.MsgNotFound)
 		return
 	}
 	h.logger.Error("registration handler error", "context", ctx, "error", err.Error())

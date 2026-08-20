@@ -9,6 +9,7 @@ import (
 	"gbevent/internal/constants"
 	"gbevent/internal/dto"
 	"gbevent/internal/middleware"
+	"gbevent/internal/repository"
 	"gbevent/internal/service"
 	"gbevent/internal/util"
 
@@ -67,6 +68,10 @@ func (h *NotificationHandler) wrapError(c *gin.Context, err error, ctx string) {
 	if errors.As(err, &appErr) {
 		h.logger.Warn("notification handler error", "context", ctx, "error", appErr.Error())
 		Fail(c, appErrorStatus(appErr.Code), appErr.Code, appErr.Message)
+		return
+	}
+	if errors.Is(err, repository.ErrNotFound) {
+		Fail(c, http.StatusNotFound, constants.CodeNotFound, constants.MsgNotFound)
 		return
 	}
 	h.logger.Error("notification handler error", "context", ctx, "error", err.Error())

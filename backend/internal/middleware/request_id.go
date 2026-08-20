@@ -1,8 +1,7 @@
 package middleware
 
 import (
-	"crypto/rand"
-	"encoding/hex"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,10 +21,10 @@ func RequestID() gin.HandlerFunc {
 	}
 }
 
+// newRequestID 用进程内自增序号生成请求 ID。
+var seq uint64
+
 func newRequestID() string {
-	var b [16]byte
-	if _, err := rand.Read(b[:]); err != nil {
-		return "req-" + hex.EncodeToString([]byte{0, 0, 0, 0, 0, 0, 0, 1})
-	}
-	return hex.EncodeToString(b[:])
+	seq++
+	return fmt.Sprintf("req-%d", seq)
 }

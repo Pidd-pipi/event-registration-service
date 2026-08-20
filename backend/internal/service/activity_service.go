@@ -15,18 +15,21 @@ import (
 
 // ActivityService 活动业务逻辑。
 type ActivityService struct {
+	db          *gorm.DB
 	repo        *repository.ActivityRepository
 	regRepo     *repository.RegistrationRepository
+	commentRepo *repository.CommentRepository
 	notifyRepo  *repository.NotificationRepository
 	checkinRepo *repository.CheckInRecordRepository
 	logger      *slog.Logger
 }
 
 // NewActivityService 构造活动服务。
-func NewActivityService(repo *repository.ActivityRepository, regRepo *repository.RegistrationRepository,
-	notifyRepo *repository.NotificationRepository, checkinRepo *repository.CheckInRecordRepository,
-	logger *slog.Logger) *ActivityService {
-	return &ActivityService{repo: repo, regRepo: regRepo, notifyRepo: notifyRepo, checkinRepo: checkinRepo, logger: logger}
+func NewActivityService(db *gorm.DB, repo *repository.ActivityRepository, regRepo *repository.RegistrationRepository,
+	commentRepo *repository.CommentRepository, notifyRepo *repository.NotificationRepository,
+	checkinRepo *repository.CheckInRecordRepository, logger *slog.Logger) *ActivityService {
+	return &ActivityService{db: db, repo: repo, regRepo: regRepo, commentRepo: commentRepo,
+		notifyRepo: notifyRepo, checkinRepo: checkinRepo, logger: logger}
 }
 
 // Create 创建活动。

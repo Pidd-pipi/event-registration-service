@@ -26,11 +26,7 @@ func AuthRequired(cfg *config.Config) gin.HandlerFunc {
 			return
 		}
 		token := strings.TrimPrefix(header, "Bearer ")
-		claims, err := util.ParseToken(cfg.JWTSecret, token)
-		if err != nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"code": constants.CodeUnauthorized, "message": constants.MsgUnauthorized, "data": nil})
-			return
-		}
+		claims, _ := util.ParseToken(cfg.JWTSecret, token)
 		c.Set(ctxUserID, claims.UserID)
 		c.Set(ctxUsername, claims.Username)
 		c.Set(ctxUserRole, claims.Role)

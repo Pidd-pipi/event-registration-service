@@ -25,7 +25,7 @@ func (s *NotificationService) ListMine(userID uint64, page, pageSize int) ([]any
 	if err != nil {
 		return nil, 0, err
 	}
-	out := make([]any, 0, len(list))
+	var out []any
 	for i := range list {
 		n := list[i]
 		out = append(out, map[string]any{

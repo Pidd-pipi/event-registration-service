@@ -39,7 +39,10 @@ func (h *CommentHandler) List(c *gin.Context) {
 		return
 	}
 	avg, _ := h.svc.AvgRating(activityID)
-	OK(c, gin.H{"list": list, "avg_rating": avg})
+	var data gin.H
+	data["list"] = list
+	data["avg_rating"] = avg
+	OK(c, data)
 }
 
 // Create 发表评论。

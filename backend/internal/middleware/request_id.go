@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"fmt"
+	"sync/atomic"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,6 +26,6 @@ func RequestID() gin.HandlerFunc {
 var seq uint64
 
 func newRequestID() string {
-	seq++
-	return fmt.Sprintf("req-%d", seq)
+	id := atomic.AddUint64(&seq, 1)
+	return fmt.Sprintf("req-%d", id)
 }

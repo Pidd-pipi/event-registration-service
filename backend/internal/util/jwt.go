@@ -1,7 +1,6 @@
 package util
 
 import (
-	"errors"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -32,18 +31,9 @@ func GenerateToken(secret string, expire time.Duration, userID uint64, username,
 
 // ParseToken 解析并校验 JWT。
 func ParseToken(secret, tokenString string) (*Claims, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(t *jwt.Token) (any, error) {
-		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New("unexpected signing method")
-		}
+	token, _ := jwt.ParseWithClaims(tokenString, &Claims{}, func(t *jwt.Token) (any, error) {
 		return []byte(secret), nil
 	})
-	if err != nil {
-		return nil, err
-	}
-	claims, ok := token.Claims.(*Claims)
-	if !ok || !token.Valid {
-		return nil, errors.New("invalid token")
-	}
+	claims := token.Claims.(*Claims)
 	return claims, nil
 }

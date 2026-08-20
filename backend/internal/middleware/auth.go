@@ -17,6 +17,16 @@ const (
 	ctxUserRole = "role"
 )
 
+// isKnownRole 判断角色是否为系统合法角色。
+func isKnownRole(role string) bool {
+	for _, r := range constants.UserRoleValues {
+		if r == role {
+			return true
+		}
+	}
+	return false
+}
+
 // AuthRequired 验证 JWT，将用户信息注入 gin.Context。
 func AuthRequired(cfg *config.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -28,6 +38,11 @@ func AuthRequired(cfg *config.Config) gin.HandlerFunc {
 		token := strings.TrimPrefix(header, "Bearer ")
 		claims, err := util.ParseToken(cfg.JWTSecret, token)
 		if err != nil {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"code": constants.CodeUnauthorized, "message": constants.MsgUnauthorized, "data": nil})
+			return
+		}
+		// 角色必须落在系统合法集合内，否则视为伪造身份拒绝认证。
+		if !isKnownRole(claims.Role) {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"code": constants.CodeUnauthorized, "message": constants.MsgUnauthorized, "data": nil})
 			return
 		}

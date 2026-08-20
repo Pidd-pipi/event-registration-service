@@ -1,10 +1,14 @@
 package util
 
 import (
+	"errors"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
+
+// 签发方，登录签发与校验必须一致。
+const jwtIssuer = "gbevent"
 
 // Claims 自定义 JWT 载荷。
 type Claims struct {
@@ -23,17 +27,27 @@ func GenerateToken(secret string, expire time.Duration, userID uint64, username,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(expire)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
-			Issuer:    "gbevent",
+			Issuer:    jwtIssuer,
 		},
 	}
 	return jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(secret))
 }
 
-// ParseToken 解析并校验 JWT。
+// ParseToken 解析并校验 JWT：签名、过期时间、签发方均须合法，否则返回错误。
 func ParseToken(secret, tokenString string) (*Claims, error) {
-	token, _ := jwt.ParseWithClaims(tokenString, &Claims{}, func(t *jwt.Token) (any, error) {
+	if secret == "" || tokenString == "" {
+		return nil, errors.New("empty secret or token")
+	}
+	claims := &Claims{}
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(t *jwt.Token) (any, error) {
+		// 仅接受 HMAC，杜绝 alg=none 及算法混淆攻击。
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, jwt.ErrTokenSignatureInvalid
+		}
 		return []byte(secret), nil
-	})
-	claims := token.Claims.(*Claims)
+	}, jwt.WithIssuer(jwtIssuer))
+	if err != nil || !token.Valid {
+		return nil, errors.New("invalid token")
+	}
 	return claims, nil
 }

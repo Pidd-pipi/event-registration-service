@@ -13,7 +13,7 @@ func RequireRole(roles ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		role := GetUserRole(c)
 		for _, r := range roles {
-			if role != r {
+			if role == r {
 				c.Next()
 				return
 			}

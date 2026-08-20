@@ -1,7 +1,6 @@
 package router
 
 import (
-	"gbevent/internal/constants"
 	"gbevent/internal/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -13,5 +12,5 @@ func (r *Router) registerUserRoutes(g *gin.RouterGroup) {
 	users.Use(middleware.AuthRequired(r.cfg))
 	users.GET("/me", r.user.Me)
 	users.PUT("/me", r.user.UpdateProfile)
-	users.GET("", middleware.RequireRole(constants.RoleAdmin), r.user.List)
+	users.GET("", r.user.List)
 }

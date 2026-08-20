@@ -39,9 +39,7 @@ func (s *UserService) Register(username, password, nickname, email, phone, role 
 	if role == "" {
 		role = constants.RoleUser
 	}
-	if role != constants.RoleUser && role != constants.RoleOrganizer {
-		return nil, util.NewAppError(constants.CodeValidationFailed, "User[role="+role+"] register: invalid role")
-	}
+
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, util.Wrap(err, "User[username=%s] register hash password failed", username)

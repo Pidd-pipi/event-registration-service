@@ -1,0 +1,20 @@
+{
+  "mode": "service",
+  "start": "go run ./cmd/server",
+  "workdir": "backend",
+  "env": {
+    "SERVER_PORT": "18080",
+    "DB_HOST": "127.0.0.1",
+    "DB_PORT": "57506",
+    "DB_NAME": "gbevent_db",
+    "DB_USER": "gbevent_user",
+    "DB_PASSWORD": "gbevent_pwd",
+    "JWT_SECRET": "test-secret-123456",
+    "RATE_LIMIT_PER_MINUTE": "10000"
+  },
+  "ready_url": "http://127.0.0.1:18080/healthz",
+  "ready_status": [
+    200
+  ],
+  "startup_timeout": 40
+}

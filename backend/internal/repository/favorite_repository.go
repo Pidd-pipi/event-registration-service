@@ -27,11 +27,15 @@ func (r *FavoriteRepository) Create(f *model.Favorite) error {
 	return nil
 }
 
-// DeleteByUserActivity 取消收藏。
+// DeleteByUserActivity 取消收藏；未收藏时返回 ErrNotFound，避免静默成功。
 func (r *FavoriteRepository) DeleteByUserActivity(userID, activityID uint64) error {
-	if err := r.db.Where("user_id = ? AND activity_id = ?", userID, activityID).
-		Delete(&model.Favorite{}).Error; err != nil {
-		return fmt.Errorf("delete favorite: %w", err)
+	res := r.db.Where("user_id = ? AND activity_id = ?", userID, activityID).
+		Delete(&model.Favorite{})
+	if res.Error != nil {
+		return fmt.Errorf("delete favorite: %w", res.Error)
+	}
+	if res.RowsAffected == 0 {
+		return ErrNotFound
 	}
 	return nil
 }

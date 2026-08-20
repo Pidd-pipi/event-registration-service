@@ -58,11 +58,15 @@ func (r *NotificationRepository) FindByID(id uint64) (*model.Notification, error
 	return &n, nil
 }
 
-// MarkRead 标记已读。
+// MarkRead 标记已读；通知不存在或不属于该用户时返回 ErrNotFound，避免静默成功。
 func (r *NotificationRepository) MarkRead(id, userID uint64) error {
-	if err := r.db.Model(&model.Notification{}).
-		Where("id = ? AND user_id = ?", id, userID).Update("is_read", true).Error; err != nil {
-		return fmt.Errorf("mark notification read: %w", err)
+	res := r.db.Model(&model.Notification{}).
+		Where("id = ? AND user_id = ?", id, userID).Update("is_read", true)
+	if res.Error != nil {
+		return fmt.Errorf("mark notification read: %w", res.Error)
+	}
+	if res.RowsAffected == 0 {
+		return ErrNotFound
 	}
 	return nil
 }

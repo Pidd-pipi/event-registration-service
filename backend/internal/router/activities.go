@@ -12,7 +12,7 @@ func (r *Router) registerActivityRoutes(g *gin.RouterGroup) {
 	activities := g.Group("/activities")
 	activities.GET("", r.activity.List)
 	activities.GET("/calendar", r.activity.Calendar)
-	activities.GET("/mine", middleware.AuthRequired(r.cfg), r.activity.Mine)
+	activities.GET("/mine", middleware.AuthRequired(r.cfg), middleware.RequireRole(constants.RoleOrganizer, constants.RoleAdmin), r.activity.Mine)
 	activities.GET("/:id", r.activity.Get)
 	activities.GET("/:id/stats", middleware.AuthRequired(r.cfg), middleware.RequireRole(constants.RoleOrganizer, constants.RoleAdmin), r.activity.Stats)
 

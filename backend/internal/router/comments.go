@@ -13,6 +13,7 @@ func (r *Router) registerCommentRoutes(g *gin.RouterGroup) {
 	comments.POST("", middleware.AuthRequired(r.cfg), r.comment.Create)
 
 	mine := g.Group("/comments")
+	mine.Use(middleware.AuthRequired(r.cfg))
 	mine.GET("/mine", r.comment.Mine)
 	mine.DELETE("/:id", r.comment.Delete)
 }

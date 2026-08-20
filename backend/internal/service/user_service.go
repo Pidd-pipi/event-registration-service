@@ -39,6 +39,10 @@ func (s *UserService) Register(username, password, nickname, email, phone, role 
 	if role == "" {
 		role = constants.RoleUser
 	}
+	// 注册仅允许普通用户角色，组织者/管理员须由后台创建，禁止自助提权。
+	if role != constants.RoleUser {
+		return nil, util.NewAppError(constants.CodeBadRequest, constants.MsgInvalidRole)
+	}
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {

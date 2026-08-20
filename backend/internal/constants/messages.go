@@ -31,4 +31,5 @@ const (
 	MsgActivityPublished   = "活动已发布"
 	MsgActivityEndedAction = "活动已结束"
 	MsgPasswordWeak        = "密码强度不足"
+	MsgInvalidRole         = "不允许该角色注册"
 )

@@ -7,7 +7,7 @@ type RegisterRequest struct {
 	Nickname string `json:"nickname" binding:"max=50"`
 	Email    string `json:"email" binding:"omitempty,email,max=100"`
 	Phone    string `json:"phone" binding:"max=20"`
-	Role     string `json:"role" binding:"omitempty,oneof=user organizer admin"`
+	Role     string `json:"role" binding:"omitempty,oneof=user"`
 }
 
 // LoginRequest 登录请求。

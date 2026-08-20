@@ -129,6 +129,8 @@ func appErrorStatus(code int) int {
 		return http.StatusTooManyRequests
 	case constants.CodeUploadTooLarge:
 		return http.StatusRequestEntityTooLarge
+	case constants.CodeUnsupportedType:
+		return http.StatusUnsupportedMediaType
 	default:
 		return http.StatusBadRequest
 	}

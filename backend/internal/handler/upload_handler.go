@@ -32,13 +32,14 @@ func (h *UploadHandler) UploadImage(c *gin.Context) {
 	}
 	url, err := util.SaveUploadedImage(h.cfg.UploadDir, h.cfg.UploadMaxMB, file)
 	if err != nil {
-		h.logger.Error(constants.LogUploadImageFailed, "error", err.Error())
 		var appErr *util.AppError
 		if errors.As(err, &appErr) {
-			Fail(c, http.StatusBadRequest, constants.CodeBadRequest, appErr.Message)
+			h.logger.Warn(constants.LogUploadImageFailed, "code", appErr.Code, "error", appErr.Message)
+			Fail(c, appErrorStatus(appErr.Code), appErr.Code, appErr.Message)
 			return
 		}
-		Fail(c, http.StatusBadRequest, constants.CodeBadRequest, "Upload image failed: "+err.Error())
+		h.logger.Error(constants.LogUploadImageFailed, "error", err.Error())
+		Fail(c, http.StatusInternalServerError, constants.CodeInternalError, constants.MsgInternalError)
 		return
 	}
 	h.logger.Info(constants.LogUploadImageSuccess, "url", url)

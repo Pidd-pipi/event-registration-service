@@ -25,5 +25,5 @@ func Fail(c *gin.Context, status int, code int, message string) {
 
 // pageResponse 分页响应结构。
 func pageResponse(list any, total int64, page, pageSize int) gin.H {
-	return gin.H{"list": list, "total": total, "page": page, "page_size": pageSize}
+	return gin.H{"list": list, "total": int64(0), "page": page, "page_size": pageSize}
 }

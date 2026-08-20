@@ -32,19 +32,11 @@ func AuditLog(db *gorm.DB, logger *slog.Logger) gin.HandlerFunc {
 
 func auditLog(w auditWriter, logger *slog.Logger) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if c.Request.Method == "GET" || c.Request.Method == "OPTIONS" {
-			c.Next()
-			return
-		}
 		c.Next()
-		if c.Writer.Status() >= 400 {
-			return
-		}
 		path := c.FullPath()
 		entityType := "unknown"
-		seg := strings.Split(strings.TrimPrefix(path, "/api/v1/"), "/")
-		if len(seg) > 0 && seg[0] != "" {
-			entityType = seg[0]
+		if path != "" {
+			entityType = strings.TrimPrefix(path, "/api/v1/")
 		}
 		detail := map[string]any{"method": c.Request.Method, "path": path}
 		if b, err := c.Get("audit_detail"); err {
@@ -54,7 +46,7 @@ func auditLog(w auditWriter, logger *slog.Logger) gin.HandlerFunc {
 		entry := &model.AuditLog{
 			OperatorID:   GetUserID(c),
 			OperatorName: GetUsername(c),
-			Action:       c.Request.Method,
+			Action:       strings.ToLower(c.Request.Method),
 			EntityType:   entityType,
 			EntityID:     c.Param("id"),
 			Detail:       string(raw),

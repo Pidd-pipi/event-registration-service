@@ -34,6 +34,9 @@ func (s *NotificationService) ListMine(userID uint64, page, pageSize int) ([]any
 			"type_text": util.NotificationTypeText(n.NotificationType),
 		})
 	}
+	if out == nil {
+		out = []any{}
+	}
 	return out, total, nil
 }
 

@@ -15,6 +15,9 @@ import (
 func ErrorHandler(logger *slog.Logger) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
+		if len(c.Errors) == 0 {
+			return
+		}
 		err := c.Errors.Last().Err
 		var appErr *util.AppError
 		if errors.As(err, &appErr) {

@@ -32,7 +32,7 @@ func (r *UserRepository) FindByID(id uint64) (*model.User, error) {
 	var u model.User
 	if err := r.db.First(&u, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrNotFound
+			return nil, fmt.Errorf("user %d not found", id)
 		}
 		return nil, fmt.Errorf("find user by id: %w", err)
 	}
@@ -44,7 +44,7 @@ func (r *UserRepository) FindByUsername(username string) (*model.User, error) {
 	var u model.User
 	if err := r.db.Where("username = ?", username).First(&u).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrNotFound
+			return nil, fmt.Errorf("username %q not found", username)
 		}
 		return nil, fmt.Errorf("find user by username: %w", err)
 	}

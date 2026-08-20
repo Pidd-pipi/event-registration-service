@@ -47,7 +47,7 @@ func (r *ActivityRepository) findByID(db *gorm.DB, id uint64, forUpdate bool) (*
 	}
 	if err := q.First(&a, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrNotFound
+			return nil, fmt.Errorf("activity %d not found", id)
 		}
 		return nil, fmt.Errorf("find activity by id: %w", err)
 	}

@@ -77,9 +77,6 @@ func (s *RegistrationService) Cancel(id, operatorID uint64, operatorRole string)
 	if operatorRole != constants.RoleAdmin && reg.UserID != operatorID {
 		return nil, util.NewAppError(constants.CodeForbidden, "Registration[id="+itoa(id)+"] cancel forbidden: not owner")
 	}
-	if reg.Status != constants.RegistrationStatusRegistered {
-		return nil, util.NewAppError(constants.CodeCancelConflict, constants.MsgCancelConflict)
-	}
 	reg.Status = constants.RegistrationStatusCancelled
 	if err := s.repo.Update(reg); err != nil {
 		return nil, util.Wrap(err, "Registration[id=%d] cancel save failed", id)
@@ -102,9 +99,6 @@ func (s *RegistrationService) Review(id, operatorID uint64, operatorRole string,
 		}
 		if !IsOrganizer(operatorID, operatorRole, act.OrganizerID) {
 			return util.NewAppError(constants.CodeForbidden, "Registration[id="+itoa(id)+"] review forbidden: organizer not match")
-		}
-		if cur.ReviewStatus != constants.ReviewStatusPending {
-			return util.NewAppError(constants.CodeReviewConflict, constants.MsgReviewConflict)
 		}
 		if !constants.IsValidReviewStatus(reviewStatus) {
 			return util.NewAppError(constants.CodeValidationFailed, "Registration[id="+itoa(id)+"] review invalid status="+reviewStatus)

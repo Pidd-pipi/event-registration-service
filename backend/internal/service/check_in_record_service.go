@@ -69,9 +69,6 @@ func (s *CheckInRecordService) doCheckIn(reg *model.Registration, operatorID uin
 		if cur.Status == constants.RegistrationStatusCheckedIn {
 			return util.NewAppError(constants.CodeAlreadyCheckedIn, constants.MsgAlreadyCheckedIn)
 		}
-		if cur.Status != constants.RegistrationStatusRegistered {
-			return util.NewAppError(constants.CodeCancelConflict, "Registration[id="+itoa(cur.ID)+"] cannot checkin: status="+cur.Status)
-		}
 		rec = &model.CheckInRecord{
 			RegistrationID: cur.ID,
 			ActivityID:     cur.ActivityID,

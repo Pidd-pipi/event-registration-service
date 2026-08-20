@@ -35,7 +35,7 @@ func (h *UploadHandler) UploadImage(c *gin.Context) {
 		h.logger.Error(constants.LogUploadImageFailed, "error", err.Error())
 		var appErr *util.AppError
 		if errors.As(err, &appErr) {
-			Fail(c, appErrorStatus(appErr.Code), appErr.Code, appErr.Message)
+			Fail(c, http.StatusBadRequest, constants.CodeBadRequest, appErr.Message)
 			return
 		}
 		Fail(c, http.StatusBadRequest, constants.CodeBadRequest, "Upload image failed: "+err.Error())
